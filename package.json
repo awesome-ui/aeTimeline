@@ -1,0 +1,15 @@
+{
+    "name": "aeTimeline", "version": "0.0.1",
+
+    "devDependencies": {
+        "gulp": "latest",
+        "gulp-ng-annotate": "latest",
+        "gulp-uglify": "latest",
+        "gulp-rename": "latest",
+        "gulp-less": "latest",
+        "gulp-autoprefixer": "latest",
+        "gulp-jade": "latest"
+    },
+
+    "license": "GPL"
+}
