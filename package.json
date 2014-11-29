@@ -1,6 +1,12 @@
 {
     "name": "aeTimeline", "version": "0.0.1",
 
+    "repository": "awesome-ui/aeTimeline",
+
+    "scripts": {
+        "start": "gulp"
+    },
+
     "devDependencies": {
         "gulp": "latest",
         "gulp-ng-annotate": "latest",
