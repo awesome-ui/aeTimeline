@@ -90,3 +90,89 @@
         }
     }
 }
+
+
+
+.b-input-datetime {
+
+    &__t {
+        display: table;
+        width: 100%;
+
+        &__c {
+            display: table-cell;
+            padding: 5px;
+            text-align: center;
+            vertical-align: middle;
+
+            &_input {
+                width: 25%;
+            }
+
+            &_label {
+                font-size: 16px;
+            }
+        }
+    }
+
+}
+
+.b-input-date {
+    display: block;
+    position: relative;
+    width: 100%; height: 72px;
+
+    &__btn {
+        display: block;
+        position: absolute; right: 0; left: 0;
+        width: 100%; height: 22px;
+
+        &_next {
+            top: 0;
+            & > button {
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+        }
+
+        &_prev {
+            bottom: 0;
+            & > button {
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+            }
+        }
+
+        & > button {
+            display: block;
+            width: 100%; height: 22px;
+            margin: 0; padding: 0;
+            font-family: inherit;
+            font-size: 14px;
+            color: #373737;
+            background: #E2E2E2;
+            border: 1px solid;
+            border-color: #FFF #B2B2B2 #B2B2B2 #FFF;
+            outline: 0;
+            text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.37);
+
+            &:active {
+                background-color: #f2f2f2;
+            }
+        }
+    }
+
+    &__input {
+        display: block;
+        position: absolute; top: 22px; right: 0; bottom: 22px; left: 0;
+
+        & > input {
+            display: block;
+            width: 100%; height: 100%;
+            margin: 0; padding: 0;
+            font-family: inherit; font-size: inherit;
+            text-align: center;
+            border: 1px solid #ccc; border-top: 0; border-bottom: 0;
+        }
+    }
+}

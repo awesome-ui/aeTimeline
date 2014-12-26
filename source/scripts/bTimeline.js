@@ -10,6 +10,8 @@ angular.module('bTimeline', [])
     .directive('bTimelinePopup', bTimelinePopupDirective)
     .directive('bTimelinePopupInterval', bTimelinePopupIntervalDirective)
 
+    .directive('bInputDatetime', bInputDatetimeDirective)
+
 ;
 
 
@@ -75,8 +77,46 @@ function bTimelineDirective(bTimeline) {
                 '<div class="b-timeline__interval" b-timeline-interval ng-repeat="interval in chunk.intervals track by $index" ng-click="popupShowInterval(interval)" ng-class="{_isBegin:interval.isBegin,_isEnd:interval.isEnd,_isSelected:popupShownInterval(interval),_isStarted:false}" ng-style="{left:calcChunkIntervalLeft(chunk,interval), right:calcChunkIntervalRight(chunk,interval)}"></div>'+
                 '<div class="b-timeline__popup" b-timeline-popup ng-click="popupInterval=null; popupShow(bTimelinePopup)" ng-class="{_isShown:popupShown(bTimelinePopup)}">'+
                     '<div class="b-timeline-popup" ng-if="popupShown(bTimelinePopup)">'+
-                        '<div class="b-timeline-popup__main" ng-class="{_hasInterval:popupInterval}">'+
-                            '<div class="b-timeline-popup-interval" b-timeline-popup-interval>{{popupInterval.interval}}</div>'+
+                        '<div class="b-timeline-popup__main" ng-class="{_hasInterval:popupInterval}" ng-click="$event.stopPropagation()">'+
+                            '<div class="b-timeline-popup-interval" b-timeline-popup-interval>'+
+                                '<div class="b-input-datetime" b-input-datetime ng-if="popupInterval">'+
+                                    '<div class="b-input-datetime__t">'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_input">'+
+                                            '<div class="b-input-date">'+
+                                                '<div class="b-input-date__btn b-input-date__btn_next"><button ng-click="incrBeginHours(popupInterval.interval)">+</button></div>'+
+                                                '<div class="b-input-date__input"><input readonly value="{{popupInterval.interval.beginDate|date:\'HH\'}}"/></div>'+
+                                                '<div class="b-input-date__btn b-input-date__btn_prev"><button ng-click="decrBeginHours(popupInterval.interval)">−</button></div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_input">'+
+                                            '<div class="b-input-date">'+
+                                                '<div class="b-input-date__btn b-input-date__btn_next"><button ng-click="incrBeginMinutes(popupInterval.interval)">+</button></div>'+
+                                                '<div class="b-input-date__input"><input readonly value="{{popupInterval.interval.beginDate|date:\'mm\'}}"/></div>'+
+                                                '<div class="b-input-date__btn b-input-date__btn_prev"><button ng-click="decrBeginMinutes(popupInterval.interval)">−</button></div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_label">&mdash;</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_input">'+
+                                            '<div class="b-input-date">'+
+                                                '<div class="b-input-date__btn b-input-date__btn_next"><button ng-click="incrEndHours(popupInterval.interval)">+</button></div>'+
+                                                '<div class="b-input-date__input"><input readonly value="{{popupInterval.interval.endDate|date:\'HH\'}}"/></div>'+
+                                                '<div class="b-input-date__btn b-input-date__btn_prev"><button ng-click="decrEndHours(popupInterval.interval)">−</button></div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>'+
+                                        '<div class="b-input-datetime__t__c b-input-datetime__t__c_input">'+
+                                            '<div class="b-input-date">'+
+                                                '<div class="b-input-date__btn b-input-date__btn_next"><button ng-click="incrEndMinutes(popupInterval.interval)">+</button></div>'+
+                                                '<div class="b-input-date__input"><input readonly value="{{popupInterval.interval.endDate|date:\'mm\'}}"/></div>'+
+                                                '<div class="b-input-date__btn b-input-date__btn_prev"><button ng-click="decrEndMinutes(popupInterval.interval)">−</button></div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="!popupInterval"><button>Add interval</button></div>'+
+                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="popupInterval"><button>Delete interval</button></div>'+
+                            '</div>'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
@@ -181,74 +221,6 @@ function bTimelinePopupDirective(bTimeline) {
 
     function bTimelinePopupDirectiveCtrl($scope) {
 
-        $scope.incrBeginHours= function (interval) {
-            interval.beginDate.setHours(
-                interval.beginDate.getHours() + 1
-            )
-            if (interval.beginDate > interval.endDate) {
-                interval.beginDate.setTime(
-                    interval.endDate.getTime()
-                )
-            }
-        }
-
-        $scope.incrBeginMinutes= function (interval) {
-            interval.beginDate.setMinutes(
-                interval.beginDate.getMinutes() + 15
-            )
-            if (interval.beginDate > interval.endDate) {
-                interval.beginDate.setTime(
-                    interval.endDate.getTime()
-                )
-            }
-        }
-
-        $scope.decrBeginHours= function (interval) {
-            interval.beginDate.setHours(
-                interval.beginDate.getHours() - 1
-            )
-        }
-
-        $scope.decrBeginMinutes= function (interval) {
-            interval.beginDate.setMinutes(
-                interval.beginDate.getMinutes() - 15
-            )
-        }
-
-        $scope.incrEndHours= function (interval) {
-            interval.endDate.setHours(
-                interval.endDate.getHours() + 1
-            )
-        }
-
-        $scope.incrEndMinutes= function (interval) {
-            interval.endDate.setMinutes(
-                interval.endDate.getMinutes() + 15
-            )
-        }
-
-        $scope.decrEndHours= function (interval) {
-            interval.endDate.setHours(
-                interval.endDate.getHours() - 1
-            )
-            if (interval.endDate < interval.beginDate) {
-                interval.endDate.setTime(
-                    interval.beginDate.getTime()
-                )
-            }
-        }
-
-        $scope.decrEndMinutes= function (interval) {
-            interval.endDate.setMinutes(
-                interval.endDate.getMinutes() - 15
-            )
-            if (interval.endDate < interval.beginDate) {
-                interval.endDate.setTime(
-                    interval.beginDate.getTime()
-                )
-            }
-        }
-
     }
 
     function bTimelinePopupDirectiveLink($scope, $e, $a) {
@@ -279,5 +251,88 @@ function bTimelinePopupIntervalDirective(bTimeline) {
             console.warn('destroy popup interval', $scope.popupInterval)
             $scope.popupInterval
         })
+    }
+}
+
+
+
+function bInputDatetimeDirective(bTimeline) {
+
+    return {
+        restrict: 'A',
+
+        link: bInputDatetimeDirectiveLink,
+    }
+
+    function bInputDatetimeDirectiveLink($scope, $e, $a) {
+
+        $scope.incrBeginHours= function (interval) {
+            interval.beginDate.setHours(
+                interval.beginDate.getHours() + 1
+            )
+            if (interval.beginDate > interval.endDate) {
+                interval.beginDate.setTime(
+                    interval.endDate.getTime()
+                )
+            }
+        }
+
+        $scope.incrBeginMinutes= function (interval) {
+            interval.beginDate.setMinutes(
+                interval.beginDate.getMinutes() + 5
+            )
+            if (interval.beginDate > interval.endDate) {
+                interval.beginDate.setTime(
+                    interval.endDate.getTime()
+                )
+            }
+        }
+
+        $scope.decrBeginHours= function (interval) {
+            interval.beginDate.setHours(
+                interval.beginDate.getHours() - 1
+            )
+        }
+
+        $scope.decrBeginMinutes= function (interval) {
+            interval.beginDate.setMinutes(
+                interval.beginDate.getMinutes() - 5
+            )
+        }
+
+        $scope.incrEndHours= function (interval) {
+            interval.endDate.setHours(
+                interval.endDate.getHours() + 1
+            )
+        }
+
+        $scope.incrEndMinutes= function (interval) {
+            interval.endDate.setMinutes(
+                interval.endDate.getMinutes() + 5
+            )
+        }
+
+        $scope.decrEndHours= function (interval) {
+            interval.endDate.setHours(
+                interval.endDate.getHours() - 1
+            )
+            if (interval.endDate < interval.beginDate) {
+                interval.endDate.setTime(
+                    interval.beginDate.getTime()
+                )
+            }
+        }
+
+        $scope.decrEndMinutes= function (interval) {
+            interval.endDate.setMinutes(
+                interval.endDate.getMinutes() - 5
+            )
+            if (interval.endDate < interval.beginDate) {
+                interval.endDate.setTime(
+                    interval.beginDate.getTime()
+                )
+            }
+        }
+
     }
 }
