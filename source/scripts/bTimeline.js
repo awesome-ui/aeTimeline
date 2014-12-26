@@ -7,6 +7,8 @@ angular.module('bTimeline', [])
 
     .directive('bTimeline', bTimelineDirective)
     .directive('bTimelineInterval', bTimelineIntervalDirective)
+    .directive('bTimelinePopup', bTimelinePopupDirective)
+    .directive('bTimelinePopupInterval', bTimelinePopupIntervalDirective)
 
 ;
 
@@ -66,10 +68,18 @@ function bTimelineDirective(bTimeline) {
 
     return {
         restrict: 'E',
+        require: 'ngModel',
 
         template: ''+
             '<div class="b-timeline">'+
-                '<div class="b-timeline__interval" b-timeline-interval ng-repeat="interval in chunk.intervals track by $index" ng-class="{_isBegin:interval.isBegin,_isEnd:interval.isEnd,_isStarted:false}" ng-style="{left:calcChunkIntervalLeft(chunk,interval), right:calcChunkIntervalRight(chunk,interval)}"></div>'+
+                '<div class="b-timeline__interval" b-timeline-interval ng-repeat="interval in chunk.intervals track by $index" ng-click="popupShowInterval(interval)" ng-class="{_isBegin:interval.isBegin,_isEnd:interval.isEnd,_isSelected:popupShownInterval(interval),_isStarted:false}" ng-style="{left:calcChunkIntervalLeft(chunk,interval), right:calcChunkIntervalRight(chunk,interval)}"></div>'+
+                '<div class="b-timeline__popup" b-timeline-popup ng-click="popupInterval=null; popupShow(bTimelinePopup)" ng-class="{_isShown:popupShown(bTimelinePopup)}">'+
+                    '<div class="b-timeline-popup" ng-if="popupShown(bTimelinePopup)">'+
+                        '<div class="b-timeline-popup__main" ng-class="{_hasInterval:popupInterval}">'+
+                            '<div class="b-timeline-popup-interval" b-timeline-popup-interval>{{popupInterval.interval}}</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
             '</div>'+
         '',
 
@@ -79,17 +89,17 @@ function bTimelineDirective(bTimeline) {
             intervals: '=timelineIntervals',
         },
 
-        controllerAs: '',
+        controllerAs: 'bTimeline',
         controller: bTimelineDirectiveCtrl,
 
         link: bTimelineDirectiveLink,
     }
 
     function bTimelineDirectiveCtrl($scope) {
-
+        this.popup= null
     }
 
-    function bTimelineDirectiveLink($scope, $e, $a) {
+    function bTimelineDirectiveLink($scope, $e, $a, ngModel) {
 
         $scope.calcChunkIntervalLeft= function (chunk, interval) {
             var chunkPercent= (chunk.endDate.getTime() - chunk.beginDate.getTime()) / 100
@@ -110,6 +120,30 @@ function bTimelineDirective(bTimeline) {
             }
         })
 
+        $scope.popup= null
+        $scope.popupInterval= null
+
+        $scope.popupShown= function (bTimelinePopup) {
+            return $scope.popup === bTimelinePopup
+        }
+
+        $scope.popupShow= function (bTimelinePopup) {
+            $scope.popup= bTimelinePopup
+            $scope.$emit('bTimelinePopupShow', $scope.popup)
+        }
+
+        $scope.popupShownInterval= function (interval) {
+            return ngModel.$viewValue && ngModel.$viewValue.interval && ngModel.$viewValue.interval.interval === interval.interval
+        }
+
+        $scope.popupShowInterval= function (interval) {
+            $scope.popupInterval= interval
+            $scope.popupShow($scope.bTimeline.popup)
+            if (ngModel.$viewValue) {
+                ngModel.$viewValue.interval= interval
+            }
+        }
+
     }
 }
 
@@ -128,5 +162,122 @@ function bTimelineIntervalDirective(bTimeline) {
         //$scope.$watch('interval', function (interval) {
         //    console.log('interval!11')
         //}, true)
+    }
+}
+
+
+
+function bTimelinePopupDirective(bTimeline) {
+
+    return {
+        restrict: 'A',
+        require: '^bTimeline',
+
+        controllerAs: 'bTimelinePopup',
+        controller: bTimelinePopupDirectiveCtrl,
+
+        link: bTimelinePopupDirectiveLink,
+    }
+
+    function bTimelinePopupDirectiveCtrl($scope) {
+
+        $scope.incrBeginHours= function (interval) {
+            interval.beginDate.setHours(
+                interval.beginDate.getHours() + 1
+            )
+            if (interval.beginDate > interval.endDate) {
+                interval.beginDate.setTime(
+                    interval.endDate.getTime()
+                )
+            }
+        }
+
+        $scope.incrBeginMinutes= function (interval) {
+            interval.beginDate.setMinutes(
+                interval.beginDate.getMinutes() + 15
+            )
+            if (interval.beginDate > interval.endDate) {
+                interval.beginDate.setTime(
+                    interval.endDate.getTime()
+                )
+            }
+        }
+
+        $scope.decrBeginHours= function (interval) {
+            interval.beginDate.setHours(
+                interval.beginDate.getHours() - 1
+            )
+        }
+
+        $scope.decrBeginMinutes= function (interval) {
+            interval.beginDate.setMinutes(
+                interval.beginDate.getMinutes() - 15
+            )
+        }
+
+        $scope.incrEndHours= function (interval) {
+            interval.endDate.setHours(
+                interval.endDate.getHours() + 1
+            )
+        }
+
+        $scope.incrEndMinutes= function (interval) {
+            interval.endDate.setMinutes(
+                interval.endDate.getMinutes() + 15
+            )
+        }
+
+        $scope.decrEndHours= function (interval) {
+            interval.endDate.setHours(
+                interval.endDate.getHours() - 1
+            )
+            if (interval.endDate < interval.beginDate) {
+                interval.endDate.setTime(
+                    interval.beginDate.getTime()
+                )
+            }
+        }
+
+        $scope.decrEndMinutes= function (interval) {
+            interval.endDate.setMinutes(
+                interval.endDate.getMinutes() - 15
+            )
+            if (interval.endDate < interval.beginDate) {
+                interval.endDate.setTime(
+                    interval.beginDate.getTime()
+                )
+            }
+        }
+
+    }
+
+    function bTimelinePopupDirectiveLink($scope, $e, $a) {
+
+        $scope.$on('bTimelinePopupShown', function ($evt, bTimelinePopup) {
+            if ($scope.bTimelinePopup === bTimelinePopup) return
+            $scope.popup= null
+        })
+
+        $scope.bTimeline.popup= $scope.bTimelinePopup
+
+    }
+}
+
+
+
+function bTimelinePopupIntervalDirective(bTimeline) {
+
+    return {
+        restrict: 'A',
+        require: '^bTimelinePopup',
+
+        link: bTimelinePopupIntervalDirectiveLink,
+    }
+
+    function bTimelinePopupIntervalDirectiveLink($scope, $e, $a) {
+        $scope.$on('$destroy', function () {
+            console.warn('destroy popup interval', $scope.popupInterval)
+            $scope.popupInterval
+        })
     }
 }
