@@ -114,8 +114,8 @@ function bTimelineDirective(bTimeline) {
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
-                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="!popupInterval"><button>Add interval</button></div>'+
-                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="popupInterval"><button>Delete interval</button></div>'+
+                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="!popupInterval"><button ng-click="addInterval()">Add interval</button></div>'+
+                                '<div class="b-timeline-popup-interval__btn b-timeline-popup-interval__btn_create" ng-if="popupInterval"><button ng-click="deleteInterval(popupInterval.interval)">Delete interval</button></div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -184,6 +184,19 @@ function bTimelineDirective(bTimeline) {
             }
         }
 
+        $scope.addInterval= function () {
+            $scope.intervals.push({
+                beginDate: new Date($scope.beginDate),
+                endDate: new Date($scope.endDate),
+            })
+        }
+
+        $scope.deleteInterval= function (interval) {
+            var index= $scope.intervals.indexOf(interval)
+            if (~index) {
+                $scope.intervals.splice(index, 1)
+            }
+        }
     }
 }
 
