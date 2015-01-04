@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <link rel="stylesheet" href="styles/bTimeline.css">
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="scripts/bTimeline.min.js"></script>
+    <script src="scripts/bTimelineInterval.min.js"></script>
+    <script>
+      angular.module('app', ['bTimeline','bTimelineInterval'])
+      
+          .controller('ExampleCtrl', function ($scope) {
+      
+              $scope.beginDate= new Date(2015,0,3,0,0,0,0)
+              $scope.endDate= new Date(2015,0,4,0,0,0,0)
+      
+              $scope.intervals= [
+                  {
+                      beginDate: new Date(2015,0,3,1,0,0,0),
+                      endDate: new Date(2015,0,3,3,0,0,0),
+                  }, {
+                      beginDate: new Date(2015,0,3,5,0,0,0),
+                      endDate: new Date(2015,0,3,7,0,0,0),
+                  }, {
+                      beginDate: new Date(2015,0,3,9,0,0,0),
+                      endDate: new Date(2015,0,3,11,0,0,0),
+                  }
+              ]
+      
+              $scope.$on('bTimelineIntervalPick', function ($evt, interval) {
+                  $scope.$broadcast('bTimelineIntervalPicked', interval)
+              })
+      
+              $scope.save= function (pickedInterval, interval) {
+                  interval.beginDate.setTime(
+                      pickedInterval.beginDate.getTime()
+                  )
+                  interval.endDate.setTime(
+                      pickedInterval.endDate.getTime()
+                  )
+              }
+      
+          })
+      
+      ;
+      
+    </script>
+  </head>
+  <body ng-controller="ExampleCtrl">
+    <h1>aeTimeline</h1>
+    <div b-timeline timeline-begin-date="beginDate" timeline-end-date="endDate" timeline-intervals="intervals" class="example-timeline">
+      <div b-timeline-template="interval" use="['bTimeline','interval']" class="example-timeline__interval">
+        <div b-timeline-interval class="example-timeline-interval">
+          <div b-timeline-interval-template="form" use="['bTimelineInterval']" class="b-timeline-interval-form">
+            <div class="b-timeline-interval-form__main">
+              <div b-input-datetime class="b-input-datetime">
+                <div class="b-input-datetime__t">
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                    <div class="b-input-date">
+                      <div class="b-input-date__btn b-input-date__btn_next">
+                        <button ng-click="incrBeginHours(bTimelineInterval.picked)">+</button>
+                      </div>
+                      <div class="b-input-date__input">
+                        <input readonly value="{{bTimelineInterval.picked.beginDate|date:'HH'}}">
+                      </div>
+                      <div class="b-input-date__btn b-input-date__btn_prev">
+                        <button ng-click="decrBeginHours(bTimelineInterval.picked)">−</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                    <div class="b-input-date">
+                      <div class="b-input-date__btn b-input-date__btn_next">
+                        <button ng-click="incrBeginMinutes(bTimelineInterval.picked)">+</button>
+                      </div>
+                      <div class="b-input-date__input">
+                        <input readonly value="{{bTimelineInterval.picked.beginDate|date:'mm'}}">
+                      </div>
+                      <div class="b-input-date__btn b-input-date__btn_prev">
+                        <button ng-click="decrBeginMinutes(bTimelineInterval.picked)">−</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&mdash;</div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                    <div class="b-input-date">
+                      <div class="b-input-date__btn b-input-date__btn_next">
+                        <button ng-click="incrEndHours(bTimelineInterval.picked)">+</button>
+                      </div>
+                      <div class="b-input-date__input">
+                        <input readonly value="{{bTimelineInterval.picked.endDate|date:'HH'}}">
+                      </div>
+                      <div class="b-input-date__btn b-input-date__btn_prev">
+                        <button ng-click="decrEndHours(bTimelineInterval.picked)">−</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
+                  <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                    <div class="b-input-date">
+                      <div class="b-input-date__btn b-input-date__btn_next">
+                        <button ng-click="incrEndMinutes(bTimelineInterval.picked)">+</button>
+                      </div>
+                      <div class="b-input-date__input">
+                        <input readonly value="{{bTimelineInterval.picked.endDate|date:'mm'}}">
+                      </div>
+                      <div class="b-input-date__btn b-input-date__btn_prev">
+                        <button ng-click="decrEndMinutes(bTimelineInterval.picked)">−</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button ng-click="save(bTimelineInterval.picked, interval); bTimelineInterval.unpick()" ng-disabled="bTimelineInterval.isPickedPristine()">save interval</button>
+              <button ng-click="bTimelineInterval.unpick()">close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
