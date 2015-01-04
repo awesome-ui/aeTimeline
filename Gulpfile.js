@@ -28,7 +28,7 @@ gulp.task('styles', function () {
 })
 
 gulp.task('templates', function() {
-    return gulp.src('src/*.jade')
+    return gulp.src(['source/*.jade'])
         .pipe(gulpJade({ locals: {}, pretty: true }))
         .pipe(gulp.dest('release'))
     ;
@@ -39,7 +39,7 @@ gulp.task('templates', function() {
 gulp.task('watch', function () {
     gulp.watch(['source/scripts/**/*.js'], ['scripts'])
     gulp.watch(['source/styles/**/*.less'], ['styles'])
-    gulp.watch(['src/**/*.jade'], ['templates'])
+    gulp.watch(['source/**/*.jade'], ['templates'])
 })
 
 

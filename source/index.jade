@@ -1,0 +1,108 @@
+doctype html
+html(ng-app="app")
+
+    head
+
+        link(rel='stylesheet', href='styles/bTimeline.css')
+
+        script(src='bower_components/angular/angular.min.js')
+        script(src='scripts/bTimeline.min.js')
+        script(src='scripts/bTimelineInterval.min.js')
+        script.
+
+            angular.module('app', ['bTimeline','bTimelineInterval'])
+
+                .controller('ExampleCtrl', function ($scope) {
+
+                    $scope.beginDate= new Date(2015,0,3,0,0,0,0)
+                    $scope.endDate= new Date(2015,0,4,0,0,0,0)
+
+                    $scope.intervals= [
+                        {
+                            beginDate: new Date(2015,0,3,1,0,0,0),
+                            endDate: new Date(2015,0,3,3,0,0,0),
+                        }, {
+                            beginDate: new Date(2015,0,3,5,0,0,0),
+                            endDate: new Date(2015,0,3,7,0,0,0),
+                        }, {
+                            beginDate: new Date(2015,0,3,9,0,0,0),
+                            endDate: new Date(2015,0,3,11,0,0,0),
+                        }
+                    ]
+
+                    $scope.$on('bTimelineIntervalPick', function ($evt, interval) {
+                        $scope.$broadcast('bTimelineIntervalPicked', interval)
+                    })
+
+                    $scope.save= function (pickedInterval, interval) {
+                        interval.beginDate.setTime(
+                            pickedInterval.beginDate.getTime()
+                        )
+                        interval.endDate.setTime(
+                            pickedInterval.endDate.getTime()
+                        )
+                    }
+
+                })
+
+            ;
+
+    body(ng-controller="ExampleCtrl")
+
+        h1 aeTimeline
+
+        div.example-timeline(b-timeline, timeline-begin-date="beginDate", timeline-end-date="endDate", timeline-intervals="intervals")
+
+            div.example-timeline__interval(b-timeline-template="interval", use="['bTimeline','interval']")
+                div.example-timeline-interval(b-timeline-interval)
+
+                    .b-timeline-interval-form(b-timeline-interval-template="form", use="['bTimelineInterval']")
+                        .b-timeline-interval-form__main
+
+                            .b-input-datetime(b-input-datetime)
+                                .b-input-datetime__t
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                        .b-input-date
+                                            .b-input-date__btn.b-input-date__btn_next
+                                                button(ng-click="incrBeginHours(bTimelineInterval.picked)") +
+                                            .b-input-date__input
+                                                input(readonly, value="{{bTimelineInterval.picked.beginDate|date:'HH'}}")
+                                            .b-input-date__btn.b-input-date__btn_prev
+                                                button(ng-click="decrBeginHours(bTimelineInterval.picked)") −
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                        .b-input-date
+                                            .b-input-date__btn.b-input-date__btn_next
+                                                button(ng-click="incrBeginMinutes(bTimelineInterval.picked)") +
+                                            .b-input-date__input
+                                                input(readonly, value="{{bTimelineInterval.picked.beginDate|date:'mm'}}")
+                                            .b-input-date__btn.b-input-date__btn_prev
+                                                button(ng-click="decrBeginMinutes(bTimelineInterval.picked)") −
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_label &mdash;
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                        .b-input-date
+                                            .b-input-date__btn.b-input-date__btn_next
+                                                button(ng-click="incrEndHours(bTimelineInterval.picked)") +
+                                            .b-input-date__input
+                                                input(readonly, value="{{bTimelineInterval.picked.endDate|date:'HH'}}")
+                                            .b-input-date__btn.b-input-date__btn_prev
+                                                button(ng-click="decrEndHours(bTimelineInterval.picked)") −
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
+
+                                    .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                        .b-input-date
+                                            .b-input-date__btn.b-input-date__btn_next
+                                                button(ng-click="incrEndMinutes(bTimelineInterval.picked)") +
+                                            .b-input-date__input
+                                                input(readonly, value="{{bTimelineInterval.picked.endDate|date:'mm'}}")
+                                            .b-input-date__btn.b-input-date__btn_prev
+                                                button(ng-click="decrEndMinutes(bTimelineInterval.picked)") −
+
+                            button(ng-click="save(bTimelineInterval.picked, interval); bTimelineInterval.unpick()", ng-disabled="bTimelineInterval.isPickedPristine()") save interval
+                            button(ng-click="bTimelineInterval.unpick()") close
