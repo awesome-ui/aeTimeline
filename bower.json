@@ -1,5 +1,5 @@
 {
-    "name": "aeTimeline", "version": "0.5.1",
+    "name": "aeTimeline", "version": "0.5.3",
 
     "dependencies": {
         "angular": "latest"
