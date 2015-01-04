@@ -61,7 +61,7 @@ function bTimelineIntervalDirective($compile) {
             var template= ''+
                 '<div class="b-timeline-interval">'+
                     '<div class="b-timeline-interval__interval b-timeline-interval__interval_draft" ng-if="bTimelineInterval.isPicked()" ng-style="{left:bTimeline.calcIntervalLeft(bTimelineInterval.picked),right:bTimeline.calcIntervalRight(bTimelineInterval.picked)}">'+
-                        ''+
+                        '<div class="b-timeline-interval__interval__btn"></div>'+
                     '</div>'+
                     '<div class="b-timeline-interval__interval" ng-class="{\'b-timeline-interval__interval_orign\':bTimelineInterval.isPicked()}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}">'+
                         '<div class="b-timeline-interval__interval__btn" ng-click="bTimelineInterval.pick()"></div>'+
