@@ -36,13 +36,14 @@ function bTimelineDirective($compile) {
             this.calcIntervalLeft= function (interval) {
                 var chunkPercent= ($scope.endDate.getTime() - $scope.beginDate.getTime()) / 100
                 var left= ((interval.beginDate.getTime() - $scope.beginDate.getTime()) / chunkPercent)
-                var right= (($scope.endDate.getTime() - interval.endDate.getTime()) / chunkPercent)
+                left= (left < 0) ? 0 : left
                 return left +'%'
             }
 
             this.calcIntervalRight= function (interval) {
                 var chunkPercent= ($scope.endDate.getTime() - $scope.beginDate.getTime()) / 100
                 var right= (($scope.endDate.getTime() - interval.endDate.getTime()) / chunkPercent)
+                right= (right < 0) ? 0 : right
                 return right +'%'
             }
 
