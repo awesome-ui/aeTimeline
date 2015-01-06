@@ -35,6 +35,8 @@ html(ng-app="app")
                         }
                     ]
 
+                    $scope.$pickedInterval= $scope.$pickedIntervalDraft= null
+
                     $scope.pickInterval= function (interval) {
                         $scope.$pickedInterval= interval
                         $scope.$pickedIntervalDraft= {
@@ -42,8 +44,11 @@ html(ng-app="app")
                             endDate: new Date(interval.endDate),
                         }
                     }
+                    $scope.unpickInterval= function () {
+                        $scope.$pickedInterval= $scope.$pickedIntervalDraft= null
+                    }
                     $scope.pickedInterval= function (interval) {
-                        return ($scope.$pickedInterval === interval)
+                        return (interval && $scope.$pickedInterval === interval)
                     }
                     $scope.pristinePickedInterval= function (interval) {
                         if (!$scope.$pickedIntervalDraft) return false
@@ -56,6 +61,14 @@ html(ng-app="app")
                         $scope.$pickedInterval.beginDate.setTime( $scope.$pickedIntervalDraft.beginDate.getTime() )
                         $scope.$pickedInterval.endDate.setTime( $scope.$pickedIntervalDraft.endDate.getTime() )
                         $scope.$pickedInterval= null
+                    }
+
+                    $scope.deleteInterval= function (interval) {
+                        $scope.$pickedInterval= $scope.$pickedIntervalDraft= null
+                        var i= $scope.intervals.indexOf(interval)
+                        if (i > -1) {
+                            $scope.intervals.splice(i, 1)
+                        }
                     }
 
                 })
@@ -78,7 +91,7 @@ html(ng-app="app")
 
                         .b-timeline-interval__interval(ng-class="{'b-timeline-interval__interval_orign':pickedInterval(interval)}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}")
                             .b-timeline-interval__interval__btn(ng-click="pickInterval(interval)")
-                            .b-timeline-interval__interval__form(ng-if="pickedInterval(interval)")
+                            .b-timeline-interval__interval__form(ng-if="pickedInterval(interval)", ng-click="$event.stopPropagation()")
                                 .b-timeline-interval-form
                                     .b-timeline-interval-form__main
 
@@ -128,3 +141,5 @@ html(ng-app="app")
                                                             button(ng-click="decrEndMinutes($pickedIntervalDraft)") −
 
                                         button(ng-click="saveInterval(interval);", ng-disabled="pristinePickedInterval(interval)") save interval
+                                        button(ng-click="deleteInterval(interval)") delete
+                                        button(ng-click="unpickInterval(interval)") close
