@@ -1,5 +1,5 @@
 {
-    "name": "aeTimeline", "version": "0.7.3",
+    "name": "aeTimeline", "version": "0.8.1",
 
     "repository": "awesome-ui/aeTimeline",
 
@@ -25,5 +25,5 @@
         "karma-chrome-launcher": "latest"
     },
 
-    "license": "GPL"
+    "license": "LGPL"
 }

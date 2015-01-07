@@ -1,10 +1,10 @@
 {
-    "name": "aeTimeline", "version": "0.7.3",
+    "name": "aeTimeline", "version": "0.8.1",
 
     "dependencies": {
         "angular": "latest",
         "angular-mocks": "latest"
     },
 
-    "license": "GPL"
+    "license": "LGPL"
 }
