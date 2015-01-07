@@ -14,7 +14,15 @@
         "gulp-rename": "latest",
         "gulp-less": "latest",
         "gulp-autoprefixer": "latest",
-        "gulp-jade": "latest"
+        "gulp-jade": "latest",
+
+        "gulp-karma": "latest",
+
+        "karma-mocha": "latest",
+        "karma-chai": "latest",
+
+        "karma-phantomjs-launcher": "latest",
+        "karma-chrome-launcher": "latest"
     },
 
     "license": "GPL"

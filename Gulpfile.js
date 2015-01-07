@@ -34,14 +34,28 @@ gulp.task('templates', function() {
     ;
 })
 
-
-
 gulp.task('watch', function () {
     gulp.watch(['source/scripts/**/*.js'], ['scripts'])
     gulp.watch(['source/styles/**/*.less'], ['styles'])
     gulp.watch(['source/**/*.jade'], ['templates'])
 })
 
-
-
 gulp.task('default', ['scripts', 'styles', 'templates', 'watch'])
+
+
+
+var gulpKarma= require('gulp-karma')
+
+gulp.task('test', function () {
+    gulp.src([
+        'release/components/angular/angular.min.js',
+        'release/components/angular-mocks/angular-mocks.js',
+        'release/scripts/bTimeline.min.js',
+        'spec/bTimeline.js'
+    ])
+        .pipe(gulpKarma({
+            configFile: 'Karmafile.js',
+            action: 'run'
+        }))
+    ;
+})
