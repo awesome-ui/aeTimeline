@@ -10,12 +10,11 @@ html(ng-app="app")
                 height: 38px;
             }
 
-        script(src='bower_components/angular/angular.min.js')
-        script(src='scripts/bTimeline.min.js')
-        script(src='scripts/bTimelineInterval.min.js')
+        script(src='components/angular/angular.min.js')
+        script(src='scripts/bTimeline.js')
         script.
 
-            angular.module('app', ['bTimeline','bTimelineInterval'])
+            angular.module('app', ['bTimeline'])
 
                 .controller('ExampleCtrl', function ($scope) {
 
@@ -80,66 +79,61 @@ html(ng-app="app")
         h1 aeTimeline
 
         div.example-timeline(b-timeline, timeline-begin-date="beginDate", timeline-end-date="endDate", timeline-intervals="intervals")
+            div.example-timeline-interval(b-timeline-template='interval', use="['bTimeline','interval']")
 
-            div.example-timeline__interval(b-timeline-template="interval", use="['bTimeline','interval']")
-                div.example-timeline-interval(b-timeline-interval)
+                .b-timeline-interval__interval(ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}")
+                    .b-timeline-interval__interval__btn
 
-                    div(b-timeline-interval-template="interval", use="['bTimelineInterval']")
+        hr
 
-                        .b-timeline-interval__interval.b-timeline-interval__interval_draft(ng-if="pickedInterval(interval)", ng-style="{left:bTimeline.calcIntervalLeft($pickedIntervalDraft),right:bTimeline.calcIntervalRight($pickedIntervalDraft)}")
-                            .b-timeline-interval__interval__btn
+        div.example-timeline(b-timeline, timeline-begin-date="beginDate", timeline-end-date="endDate", timeline-intervals="intervals")
+            div.example-timeline-interval(b-timeline-template='interval', use="['bTimeline','interval']")
 
-                        .b-timeline-interval__interval(ng-class="{'b-timeline-interval__interval_orign':pickedInterval(interval)}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}")
-                            .b-timeline-interval__interval__btn(ng-click="pickInterval(interval)")
-                            .b-timeline-interval__interval__form(ng-if="pickedInterval(interval)", ng-click="$event.stopPropagation()")
-                                .b-timeline-interval-form
-                                    .b-timeline-interval-form__main
+                .b-timeline-interval__interval.b-timeline-interval__interval_draft(ng-if="pickedInterval(interval)", ng-style="{left:bTimeline.calcIntervalLeft($pickedIntervalDraft),right:bTimeline.calcIntervalRight($pickedIntervalDraft)}")
+                    .b-timeline-interval__interval__btn
 
-                                        .b-input-datetime(b-input-datetime)
-                                            .b-input-datetime__t
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_input
-                                                    .b-input-date
-                                                        .b-input-date__btn.b-input-date__btn_next
-                                                            button(ng-click="incrBeginHours($pickedIntervalDraft)") +
-                                                        .b-input-date__input
-                                                            input(readonly, value="{{$pickedIntervalDraft.beginDate|date:'HH'}}")
-                                                        .b-input-date__btn.b-input-date__btn_prev
-                                                            button(ng-click="decrBeginHours($pickedIntervalDraft)") −
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_input
-                                                    .b-input-date
-                                                        .b-input-date__btn.b-input-date__btn_next
-                                                            button(ng-click="incrBeginMinutes($pickedIntervalDraft)") +
-                                                        .b-input-date__input
-                                                            input(readonly, value="{{$pickedIntervalDraft.beginDate|date:'mm'}}")
-                                                        .b-input-date__btn.b-input-date__btn_prev
-                                                            button(ng-click="decrBeginMinutes($pickedIntervalDraft)") −
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_label &mdash;
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_input
-                                                    .b-input-date
-                                                        .b-input-date__btn.b-input-date__btn_next
-                                                            button(ng-click="incrEndHours($pickedIntervalDraft)") +
-                                                        .b-input-date__input
-                                                            input(readonly, value="{{$pickedIntervalDraft.endDate|date:'HH'}}")
-                                                        .b-input-date__btn.b-input-date__btn_prev
-                                                            button(ng-click="decrEndHours($pickedIntervalDraft)") −
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
-
-                                                .b-input-datetime__t__c.b-input-datetime__t__c_input
-                                                    .b-input-date
-                                                        .b-input-date__btn.b-input-date__btn_next
-                                                            button(ng-click="incrEndMinutes($pickedIntervalDraft)") +
-                                                        .b-input-date__input
-                                                            input(readonly, value="{{$pickedIntervalDraft.endDate|date:'mm'}}")
-                                                        .b-input-date__btn.b-input-date__btn_prev
-                                                            button(ng-click="decrEndMinutes($pickedIntervalDraft)") −
-
-                                        button(ng-click="saveInterval(interval);", ng-disabled="pristinePickedInterval(interval)") save interval
-                                        button(ng-click="deleteInterval(interval)") delete
-                                        button(ng-click="unpickInterval(interval)") close
+                .b-timeline-interval__interval(ng-class="{'b-timeline-interval__interval_orign':pickedInterval(interval)}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}")
+                    .b-timeline-interval__interval__btn(ng-click="pickInterval(interval)")
+                    .b-timeline-interval__interval__form(ng-if="pickedInterval(interval)", ng-click="$event.stopPropagation()")
+                        .b-timeline-interval-form
+                            .b-timeline-interval-form__main
+                                .b-input-datetime(b-input-datetime)
+                                    .b-input-datetime__t
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                            .b-input-date
+                                                .b-input-date__btn.b-input-date__btn_next
+                                                    button(ng-click="incrBeginHours($pickedIntervalDraft)") +
+                                                .b-input-date__input
+                                                    input(readonly, value="{{$pickedIntervalDraft.beginDate|date:'HH'}}")
+                                                .b-input-date__btn.b-input-date__btn_prev
+                                                    button(ng-click="decrBeginHours($pickedIntervalDraft)") −
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                            .b-input-date
+                                                .b-input-date__btn.b-input-date__btn_next
+                                                    button(ng-click="incrBeginMinutes($pickedIntervalDraft)") +
+                                                .b-input-date__input
+                                                    input(readonly, value="{{$pickedIntervalDraft.beginDate|date:'mm'}}")
+                                                .b-input-date__btn.b-input-date__btn_prev
+                                                    button(ng-click="decrBeginMinutes($pickedIntervalDraft)") −
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_label &mdash;
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                            .b-input-date
+                                                .b-input-date__btn.b-input-date__btn_next
+                                                    button(ng-click="incrEndHours($pickedIntervalDraft)") +
+                                                .b-input-date__input
+                                                    input(readonly, value="{{$pickedIntervalDraft.endDate|date:'HH'}}")
+                                                .b-input-date__btn.b-input-date__btn_prev
+                                                    button(ng-click="decrEndHours($pickedIntervalDraft)") −
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_label &#x3A;
+                                        .b-input-datetime__t__c.b-input-datetime__t__c_input
+                                            .b-input-date
+                                                .b-input-date__btn.b-input-date__btn_next
+                                                    button(ng-click="incrEndMinutes($pickedIntervalDraft)") +
+                                                .b-input-date__input
+                                                    input(readonly, value="{{$pickedIntervalDraft.endDate|date:'mm'}}")
+                                                .b-input-date__btn.b-input-date__btn_prev
+                                                    button(ng-click="decrEndMinutes($pickedIntervalDraft)") −
+                                button(ng-click="saveInterval(interval);", ng-disabled="pristinePickedInterval(interval)") save interval
+                                button(ng-click="deleteInterval(interval)") delete
+                                button(ng-click="unpickInterval(interval)") close

@@ -8,11 +8,10 @@
       }
       
     </style>
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="scripts/bTimeline.min.js"></script>
-    <script src="scripts/bTimelineInterval.min.js"></script>
+    <script src="components/angular/angular.min.js"></script>
+    <script src="scripts/bTimeline.js"></script>
     <script>
-      angular.module('app', ['bTimeline','bTimelineInterval'])
+      angular.module('app', ['bTimeline'])
       
           .controller('ExampleCtrl', function ($scope) {
       
@@ -77,81 +76,85 @@
   <body ng-controller="ExampleCtrl">
     <h1>aeTimeline</h1>
     <div b-timeline timeline-begin-date="beginDate" timeline-end-date="endDate" timeline-intervals="intervals" class="example-timeline">
-      <div b-timeline-template="interval" use="['bTimeline','interval']" class="example-timeline__interval">
-        <div b-timeline-interval class="example-timeline-interval">
-          <div b-timeline-interval-template="interval" use="['bTimelineInterval']">
-            <div ng-if="pickedInterval(interval)" ng-style="{left:bTimeline.calcIntervalLeft($pickedIntervalDraft),right:bTimeline.calcIntervalRight($pickedIntervalDraft)}" class="b-timeline-interval__interval b-timeline-interval__interval_draft">
-              <div class="b-timeline-interval__interval__btn"></div>
-            </div>
-            <div ng-class="{'b-timeline-interval__interval_orign':pickedInterval(interval)}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}" class="b-timeline-interval__interval">
-              <div ng-click="pickInterval(interval)" class="b-timeline-interval__interval__btn"></div>
-              <div ng-if="pickedInterval(interval)" ng-click="$event.stopPropagation()" class="b-timeline-interval__interval__form">
-                <div class="b-timeline-interval-form">
-                  <div class="b-timeline-interval-form__main">
-                    <div b-input-datetime class="b-input-datetime">
-                      <div class="b-input-datetime__t">
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
-                          <div class="b-input-date">
-                            <div class="b-input-date__btn b-input-date__btn_next">
-                              <button ng-click="incrBeginHours($pickedIntervalDraft)">+</button>
-                            </div>
-                            <div class="b-input-date__input">
-                              <input readonly value="{{$pickedIntervalDraft.beginDate|date:'HH'}}">
-                            </div>
-                            <div class="b-input-date__btn b-input-date__btn_prev">
-                              <button ng-click="decrBeginHours($pickedIntervalDraft)">−</button>
-                            </div>
-                          </div>
+      <div b-timeline-template="interval" use="['bTimeline','interval']" class="example-timeline-interval">
+        <div ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}" class="b-timeline-interval__interval">
+          <div class="b-timeline-interval__interval__btn"></div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div b-timeline timeline-begin-date="beginDate" timeline-end-date="endDate" timeline-intervals="intervals" class="example-timeline">
+      <div b-timeline-template="interval" use="['bTimeline','interval']" class="example-timeline-interval">
+        <div ng-if="pickedInterval(interval)" ng-style="{left:bTimeline.calcIntervalLeft($pickedIntervalDraft),right:bTimeline.calcIntervalRight($pickedIntervalDraft)}" class="b-timeline-interval__interval b-timeline-interval__interval_draft">
+          <div class="b-timeline-interval__interval__btn"></div>
+        </div>
+        <div ng-class="{'b-timeline-interval__interval_orign':pickedInterval(interval)}" ng-style="{left:bTimeline.calcIntervalLeft(interval),right:bTimeline.calcIntervalRight(interval)}" class="b-timeline-interval__interval">
+          <div ng-click="pickInterval(interval)" class="b-timeline-interval__interval__btn"></div>
+          <div ng-if="pickedInterval(interval)" ng-click="$event.stopPropagation()" class="b-timeline-interval__interval__form">
+            <div class="b-timeline-interval-form">
+              <div class="b-timeline-interval-form__main">
+                <div b-input-datetime class="b-input-datetime">
+                  <div class="b-input-datetime__t">
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                      <div class="b-input-date">
+                        <div class="b-input-date__btn b-input-date__btn_next">
+                          <button ng-click="incrBeginHours($pickedIntervalDraft)">+</button>
                         </div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
-                          <div class="b-input-date">
-                            <div class="b-input-date__btn b-input-date__btn_next">
-                              <button ng-click="incrBeginMinutes($pickedIntervalDraft)">+</button>
-                            </div>
-                            <div class="b-input-date__input">
-                              <input readonly value="{{$pickedIntervalDraft.beginDate|date:'mm'}}">
-                            </div>
-                            <div class="b-input-date__btn b-input-date__btn_prev">
-                              <button ng-click="decrBeginMinutes($pickedIntervalDraft)">−</button>
-                            </div>
-                          </div>
+                        <div class="b-input-date__input">
+                          <input readonly value="{{$pickedIntervalDraft.beginDate|date:'HH'}}">
                         </div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&mdash;</div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
-                          <div class="b-input-date">
-                            <div class="b-input-date__btn b-input-date__btn_next">
-                              <button ng-click="incrEndHours($pickedIntervalDraft)">+</button>
-                            </div>
-                            <div class="b-input-date__input">
-                              <input readonly value="{{$pickedIntervalDraft.endDate|date:'HH'}}">
-                            </div>
-                            <div class="b-input-date__btn b-input-date__btn_prev">
-                              <button ng-click="decrEndHours($pickedIntervalDraft)">−</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
-                        <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
-                          <div class="b-input-date">
-                            <div class="b-input-date__btn b-input-date__btn_next">
-                              <button ng-click="incrEndMinutes($pickedIntervalDraft)">+</button>
-                            </div>
-                            <div class="b-input-date__input">
-                              <input readonly value="{{$pickedIntervalDraft.endDate|date:'mm'}}">
-                            </div>
-                            <div class="b-input-date__btn b-input-date__btn_prev">
-                              <button ng-click="decrEndMinutes($pickedIntervalDraft)">−</button>
-                            </div>
-                          </div>
+                        <div class="b-input-date__btn b-input-date__btn_prev">
+                          <button ng-click="decrBeginHours($pickedIntervalDraft)">−</button>
                         </div>
                       </div>
                     </div>
-                    <button ng-click="saveInterval(interval);" ng-disabled="pristinePickedInterval(interval)">save interval</button>
-                    <button ng-click="deleteInterval(interval)">delete</button>
-                    <button ng-click="unpickInterval(interval)">close</button>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                      <div class="b-input-date">
+                        <div class="b-input-date__btn b-input-date__btn_next">
+                          <button ng-click="incrBeginMinutes($pickedIntervalDraft)">+</button>
+                        </div>
+                        <div class="b-input-date__input">
+                          <input readonly value="{{$pickedIntervalDraft.beginDate|date:'mm'}}">
+                        </div>
+                        <div class="b-input-date__btn b-input-date__btn_prev">
+                          <button ng-click="decrBeginMinutes($pickedIntervalDraft)">−</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&mdash;</div>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                      <div class="b-input-date">
+                        <div class="b-input-date__btn b-input-date__btn_next">
+                          <button ng-click="incrEndHours($pickedIntervalDraft)">+</button>
+                        </div>
+                        <div class="b-input-date__input">
+                          <input readonly value="{{$pickedIntervalDraft.endDate|date:'HH'}}">
+                        </div>
+                        <div class="b-input-date__btn b-input-date__btn_prev">
+                          <button ng-click="decrEndHours($pickedIntervalDraft)">−</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_label">&#x3A;</div>
+                    <div class="b-input-datetime__t__c b-input-datetime__t__c_input">
+                      <div class="b-input-date">
+                        <div class="b-input-date__btn b-input-date__btn_next">
+                          <button ng-click="incrEndMinutes($pickedIntervalDraft)">+</button>
+                        </div>
+                        <div class="b-input-date__input">
+                          <input readonly value="{{$pickedIntervalDraft.endDate|date:'mm'}}">
+                        </div>
+                        <div class="b-input-date__btn b-input-date__btn_prev">
+                          <button ng-click="decrEndMinutes($pickedIntervalDraft)">−</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <button ng-click="saveInterval(interval);" ng-disabled="pristinePickedInterval(interval)">save interval</button>
+                <button ng-click="deleteInterval(interval)">delete</button>
+                <button ng-click="unpickInterval(interval)">close</button>
               </div>
             </div>
           </div>

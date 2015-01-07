@@ -1,5 +1,5 @@
 {
-    "name": "aeTimeline", "version": "0.7.3",
+    "name": "aeTimeline", "version": "0.8.1",
 
     "repository": "awesome-ui/aeTimeline",
 
@@ -14,8 +14,16 @@
         "gulp-rename": "latest",
         "gulp-less": "latest",
         "gulp-autoprefixer": "latest",
-        "gulp-jade": "latest"
+        "gulp-jade": "latest",
+
+        "gulp-karma": "latest",
+
+        "karma-mocha": "latest",
+        "karma-chai": "latest",
+
+        "karma-phantomjs-launcher": "latest",
+        "karma-chrome-launcher": "latest"
     },
 
-    "license": "GPL"
+    "license": "LGPL"
 }
